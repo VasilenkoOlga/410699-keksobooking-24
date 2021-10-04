@@ -67,10 +67,10 @@ function getInteger (min, max) {
 }
 
 // Источник Кекс. Функция создания рандомного числа с плавающей точкой
-function getRandomPositiveFloat (numberA, NumberB, digits = 1) {
+function getRandomPositiveFloat (numberA, numberB, digits = 1) {
 
-  const lower = Math.min(Math.abs(numberA), Math.abs(NumberB));
-  const upper = Math.max(Math.abs(numberA), Math.abs(NumberB));
+  const lower = Math.min(Math.abs(numberA), Math.abs(numberB));
+  const upper = Math.max(Math.abs(numberA), Math.abs(numberB));
   // Отрицательное число берём его по модулю с помощью Math.abs
 
   // Дальше используем Math.random() для получения случайного дробного числа в диапазоне [0, 1),
