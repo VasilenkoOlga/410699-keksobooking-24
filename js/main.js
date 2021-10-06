@@ -93,7 +93,6 @@ function getFloat (min, max, decimalPlaces) {
     throw new Error('Максимальное значение меньше минимального или они равны');
   }
 
-
   return parseFloat(((Math.random() * (max - min + 1)) + min).toFixed(decimalPlaces));
 }
 
@@ -111,12 +110,12 @@ const createAuthor = function() {
 
   let num = getInteger(1,10);
   if (num < 10) {
-    num = `0${  String(num)}`;
+    num = `0${String(num)}`;
   }
   num = String(num);
 
   return {
-    avatar: `img/avatars/user${  num  }.png`,
+    avatar: `img/avatars/user${num}.png`,
   };
 };
 
@@ -133,7 +132,7 @@ const createLocation = function() {
 
 const createOffer = function () {
   return {
-    title: `Отель ${  getInteger(1, 10)}`,
+    title: `Отель ${getInteger(1, 10)}`,
     address: [createLocation().lat, createLocation().lng],
     price: getInteger(MIN_PRICE, MAX_PRICE),
     type: getRandomArrayElement(TYPE),
