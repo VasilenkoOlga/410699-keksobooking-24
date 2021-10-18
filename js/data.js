@@ -114,4 +114,4 @@ const createElements = function () {
   }
 };
 
-export {createElements};
+export {createElements, announcement};
