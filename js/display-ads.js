@@ -31,7 +31,7 @@ announcement.forEach((item) => {
   const popupFeatures = adElement.querySelector('.popup__features');
   const popupFeatureList = popupFeatures.querySelectorAll('.popup__feature');
 
-  if(item.Offer.features.constructor === Array) {
+  if(Array.isArray(item.Offer.features)) {
     const modifiers = item.Offer.features.map((featureValue) =>`popup__feature--${featureValue}`);
 
     popupFeatureList.forEach((popupFeature) => {
@@ -41,7 +41,7 @@ announcement.forEach((item) => {
       }
     });
   } else {
-    const modifiers = `popup__feature--${  item.Offer.features}`;
+    const modifiers = `popup__feature--${item.Offer.features}`;
     popupFeatureList.forEach((popupFeature) => {
       const modifier = popupFeature.classList[1]; // 1 -  индекс класса в атрибуте
       if (modifiers !== modifier) {
@@ -53,7 +53,7 @@ announcement.forEach((item) => {
   const popupPhotos = adElement.querySelector('.popup__photos');
   const popupPhoto = popupPhotos.querySelector('.popup__photo');
 
-  if(item.Offer.photos.constructor === Array) {
+  if(Array.isArray(item.Offer.photos)) {
     item.Offer.photos.forEach((photoSrc, index) => {
       if(index === 0){
         popupPhoto.src = item.Offer.photos[0];
