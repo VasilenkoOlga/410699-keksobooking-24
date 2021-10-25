@@ -6,6 +6,39 @@ const formTitle = form.querySelector('#title');
 const formPrice = form.querySelector('#price');
 const formRoomNumber = form.querySelector('#room_number');
 const formCapacity = form.querySelector('#capacity');
+const mapFilters = document.querySelector('.map__filters');
+const mapFeatures= form.children;
+const mapFiltersInteractive = mapFilters.children;
+
+// НЕ АКТИВНОЕ СОСТОЯНИЕ ФИЛЬТРОВ И ФОРМЫ
+
+const inactivePage = function () {
+  form.classList.add('ad-form--disabled');
+  Array.from(mapFeatures).forEach((feature) => { // без перевода в массив forEach не работает
+    feature.setAttribute('disabled', 'disabled');
+  });
+  mapFilters.classList.add('ad-form--disabled');
+  Array.from(mapFiltersInteractive).forEach((interactiveElement) => { // без перевода в массив forEach не работает
+    interactiveElement.setAttribute('disabled', 'disabled');
+  });
+};
+
+inactivePage();
+
+// АКТИВНОЕ СОСТОЯНИЕ ФИЛЬТРОВ И ФОРМЫ
+
+const activePage = function () {
+  form.classList.remove('ad-form--disabled');
+  Array.from(mapFeatures).forEach((feature) => { // без перевода в массив forEach не работает
+    feature.removeAttribute('disabled');
+  });
+  mapFilters.classList.remove('ad-form--disabled');
+  Array.from(mapFiltersInteractive).forEach((interactiveElement) => { // без перевода в массив forEach не работает
+    interactiveElement.removeAttribute('disabled');
+  });
+};
+
+activePage();
 
 // ПРОВЕРКА НА ОБЯЗАТЕЛЬНОСТЬ ЗАПОЛНЕНИЯ ЗАГОЛОВКА
 formTitle.addEventListener('invalid', () => {
