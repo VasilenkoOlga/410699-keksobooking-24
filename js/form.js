@@ -1,11 +1,23 @@
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 
+const TYPE_OF_HOUSING = {
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  bungalow: 0,
+  hotel: 3000,
+};
+
 const form = document.querySelector('.ad-form');
 const formTitle = form.querySelector('#title');
 const formPrice = form.querySelector('#price');
 const formRoomNumber = form.querySelector('#room_number');
 const formCapacity = form.querySelector('#capacity');
+const formType = form.querySelector('#type');
+const formTimein = form.querySelector('#timein');
+const formTimeout = form.querySelector('#timeout');
+
 const mapFilters = document.querySelector('.map__filters');
 const mapFeatures= form.children;
 const mapFiltersInteractive = mapFilters.children;
@@ -67,6 +79,8 @@ formPrice.addEventListener('invalid', () => {
 formPrice.addEventListener('input', () => {
   if (formPrice.validity.rangeOverflow){
     formPrice.setCustomValidity('Слишком высокая цена');
+  } else if (formPrice.value < TYPE_OF_HOUSING[formType.value]) {
+    formPrice.setCustomValidity(`Цена должна составлять не менее ${TYPE_OF_HOUSING[formType.value]}`);
   } else {
     formPrice.setCustomValidity('');
   }
@@ -105,4 +119,33 @@ formCapacity.addEventListener('change', () => {
   }
 
   formCapacity.reportValidity();
+});
+
+// СРАВНЕНИЕ ТИПА ЖИЛЬЯ И ЦЕНЫ
+
+formType.addEventListener('change', () => {
+  formPrice.setAttribute('min', TYPE_OF_HOUSING[formType.value]);
+  formPrice.setAttribute('placeholder', TYPE_OF_HOUSING[formType.value]);
+
+  if(formPrice.value < TYPE_OF_HOUSING[formType.value]){
+    formPrice.setCustomValidity(`Цена должна составлять не менее ${TYPE_OF_HOUSING[formType.value]}`);
+  } else {
+    formPrice.setCustomValidity('');
+  }
+
+  formPrice.reportValidity(); // Всегда актуальная ошибка в цене
+});
+
+// СРАВНЕНИЕ ВРЕМЕНИ ЗАЕЗДА И УЕЗДА
+
+formTimein.addEventListener('change', () => {
+  if(formTimein.value !== formTimeout.value) {
+    formTimeout.value = formTimein.value;
+  }
+});
+
+formTimeout.addEventListener('change', () => {
+  if(formTimeout.value !== formTimein.value) {
+    formTimein.value = formTimeout.value;
+  }
 });
