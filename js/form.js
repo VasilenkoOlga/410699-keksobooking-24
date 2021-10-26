@@ -9,7 +9,7 @@ const formCapacity = form.querySelector('#capacity');
 const mapFilters = document.querySelector('.map__filters');
 const mapFeatures= form.children;
 const mapFiltersInteractive = mapFilters.children;
-
+/*
 // НЕ АКТИВНОЕ СОСТОЯНИЕ ФИЛЬТРОВ И ФОРМЫ
 
 const inactivePage = function () {
@@ -25,6 +25,7 @@ const inactivePage = function () {
 
 inactivePage();
 
+
 // АКТИВНОЕ СОСТОЯНИЕ ФИЛЬТРОВ И ФОРМЫ
 
 const activePage = function () {
@@ -35,6 +36,29 @@ const activePage = function () {
   mapFilters.classList.remove('ad-form--disabled');
   Array.from(mapFiltersInteractive).forEach((interactiveElement) => { // без перевода в массив forEach не работает
     interactiveElement.removeAttribute('disabled');
+  });
+};
+
+activePage();
+
+*/
+const adFormDisabled = 'ad-form--disabled';
+
+const inactivePage = function () {
+  form.classList.add(adFormDisabled);
+  mapFilters.classList.add(adFormDisabled);
+  [...mapFeatures,...mapFiltersInteractive].forEach((element) => {
+    element.setAttribute('disabled', 'disabled');
+  });
+};
+
+inactivePage();
+
+const activePage = function () {
+  form.classList.remove(adFormDisabled);
+  mapFilters.classList.remove(adFormDisabled);
+  [...mapFeatures,...mapFiltersInteractive].forEach((element) => {
+    element.removeAttribute('disabled');
   });
 };
 
