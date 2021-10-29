@@ -149,3 +149,5 @@ formTimeout.addEventListener('change', () => {
     formTimein.value = formTimeout.value;
   }
 });
+
+export {inactivePage, activePage};

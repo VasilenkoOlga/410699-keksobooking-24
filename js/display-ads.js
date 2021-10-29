@@ -1,10 +1,7 @@
-import {createElements, announcement} from './data.js';
+import {createElements} from './data.js';
 
 createElements();
-
-const mapCanvas = document.querySelector('#map-canvas');
 const ad = document.querySelector('#card').content.querySelector('.popup');
-const adFragment = document.createDocumentFragment();
 
 const TYPES = {
   flat: 'Квартира',
@@ -14,7 +11,7 @@ const TYPES = {
   hotel: 'Отель',
 };
 
-announcement.forEach((item) => {
+const createCustomPopup = (item) => {
 
   const adElement = ad.cloneNode(true);
 
@@ -67,7 +64,7 @@ announcement.forEach((item) => {
     popupPhoto.src = item.Offer.photos;
   }
 
-  adFragment.appendChild(adElement);
-});
+  return adElement;
+};
 
-mapCanvas.appendChild(adFragment);
+export {createCustomPopup};
