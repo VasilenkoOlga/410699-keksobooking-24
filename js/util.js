@@ -30,4 +30,6 @@ function getRandomPositiveFloat (numberA, numberB, digits = 1) {
   return result.toFixed(digits);
 }
 
-export {getInteger, getRandomPositiveFloat};
+const isEscapeKey = (evt) => evt.key === 'Escape'; // Утилитарная функция, нажатие на ESC
+
+export {getInteger, getRandomPositiveFloat, isEscapeKey};

@@ -1,6 +1,7 @@
-import {inactivePage, activePage} from './form.js';
 //import {announcement} from './data.js';
 import {createCustomPopup} from './display-ads.js';
+import { inactivePage, activePage } from './active-page.js';
+import { resetForm } from './form.js';
 
 const LAT_CENTER = 35.68000;
 const LNG_CENTER = 139.75000;
@@ -96,8 +97,7 @@ const resetMarker = () => {
 };
 
 resetButton.addEventListener('click', () => {
-  resetMarker();
-  address.value = '4';
+  resetForm();
 });
 
 export {renderMarkers, resetMarker};
