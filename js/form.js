@@ -150,4 +150,4 @@ formTimeout.addEventListener('change', () => {
   }
 });
 
-export {inactivePage, activePage};
+export {inactivePage, activePage, formPrice};
