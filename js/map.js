@@ -1,6 +1,7 @@
-import {inactivePage, activePage} from './form.js';
-import {announcement} from './data.js';
+//import {announcement} from './data.js';
 import {createCustomPopup} from './display-ads.js';
+import { inactivePage, activePage } from './active-page.js';
+import { resetForm } from './form.js';
 
 const LAT_CENTER = 35.68000;
 const LNG_CENTER = 139.75000;
@@ -45,36 +46,58 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(mapCanvas);
 
+address.value = `${mainMarker.getLatLng().lat.toFixed(5)}, ${mainMarker.getLatLng().lng.toFixed(5)}`;
+
 mainMarker.on('moveend', (evt) => {
   address.value = `${evt.target.getLatLng().lat.toFixed(5)}, ${evt.target.getLatLng().lng.toFixed(5)}`;
 });
 
-announcement.forEach((element) =>{
 
-  const pin = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+const renderMarkers = (offers) => {
+  offers.forEach((element) =>{
+
+    const pin = L.icon({
+      iconUrl: 'img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
+
+    const marker = L.marker(
+      {
+        lat: element.location.lat,
+        lng: element.location.lng,
+      },
+      {
+        icon:pin,
+      },
+    );
+
+    marker
+      .addTo(mapCanvas)
+      .bindPopup(createCustomPopup(element));
   });
+};
 
-  const marker = L.marker(
-    {
-      lat: element.Location.lat,
-      lng: element.Location.lng,
-    },
-    {
-      icon:pin,
-    },
-  );
-
-  marker
-    .addTo(mapCanvas)
-    .bindPopup(createCustomPopup(element));
-});
-
+/*
 resetButton.addEventListener('click', () => {
   mainMarker.setLatLng({
     lat: LAT_CENTER,
     lng: LNG_CENTER,
   });
+  address.value = `${mainMarker.getLatLng().lat.toFixed(5)}, ${mainMarker.getLatLng().lng.toFixed(5)}`;
 });
+*/
+
+const resetMarker = () => {
+  mainMarker.setLatLng({
+    lat: LAT_CENTER,
+    lng: LNG_CENTER,
+  });
+  address.value = `${mainMarker.getLatLng().lat.toFixed(5)}, ${mainMarker.getLatLng().lng.toFixed(5)}`;
+};
+
+resetButton.addEventListener('click', () => {
+  resetForm();
+});
+
+export {renderMarkers, resetMarker};

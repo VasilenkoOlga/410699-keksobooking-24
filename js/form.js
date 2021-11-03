@@ -1,3 +1,6 @@
+import  {resetMarker} from './map.js';
+import {mapFilters} from './active-page.js';
+
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 
@@ -17,35 +20,6 @@ const formCapacity = form.querySelector('#capacity');
 const formType = form.querySelector('#type');
 const formTimein = form.querySelector('#timein');
 const formTimeout = form.querySelector('#timeout');
-
-const mapFilters = document.querySelector('.map__filters');
-const mapFeatures= form.children;
-const mapFiltersInteractive = mapFilters.children;
-const adFormDisabled = 'ad-form--disabled';
-
-// НЕ АКТИВНОЕ СОСТОЯНИЕ ФИЛЬТРОВ И ФОРМЫ
-
-const inactivePage = function () {
-  form.classList.add(adFormDisabled);
-  mapFilters.classList.add(adFormDisabled);
-  [...mapFeatures,...mapFiltersInteractive].forEach((element) => {
-    element.setAttribute('disabled', 'disabled');
-  });
-};
-
-inactivePage();
-
-// АКТИВНОЕ СОСТОЯНИЕ ФИЛЬТРОВ И ФОРМЫ
-
-const activePage = function () {
-  form.classList.remove(adFormDisabled);
-  mapFilters.classList.remove(adFormDisabled);
-  [...mapFeatures,...mapFiltersInteractive].forEach((element) => {
-    element.removeAttribute('disabled');
-  });
-};
-
-activePage();
 
 // ПРОВЕРКА НА ОБЯЗАТЕЛЬНОСТЬ ЗАПОЛНЕНИЯ ЗАГОЛОВКА
 formTitle.addEventListener('invalid', () => {
@@ -150,4 +124,15 @@ formTimeout.addEventListener('change', () => {
   }
 });
 
-export {inactivePage, activePage};
+
+const clearForm = () => {
+  form.reset();
+  mapFilters.reset();
+};
+
+const resetForm = () => {
+  clearForm();
+  resetMarker();
+};
+
+export { resetForm, form};

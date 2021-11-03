@@ -1,3 +1,4 @@
+/*
 import {getInteger, getRandomPositiveFloat} from './util.js';
 
 const TYPE = [
@@ -107,11 +108,13 @@ const announcement = [];
 const createElements = function () {
   for (let index= 0; index < 10 ;index++) {
     announcement.push ({
-      Author: createAuthor(),
-      Location: createLocation(),
-      Offer: createOffer(),
+      author: createAuthor(),
+      location: createLocation(),
+      offer: createOffer(),
     });
   }
 };
 
 export {createElements, announcement};
+
+*/

@@ -1,6 +1,6 @@
-import {createElements} from './data.js';
+//import {createElements} from './data.js';
 
-createElements();
+//createElements();
 const ad = document.querySelector('#card').content.querySelector('.popup');
 
 const TYPES = {
@@ -15,21 +15,21 @@ const createCustomPopup = (item) => {
 
   const adElement = ad.cloneNode(true);
 
-  adElement.querySelector('.popup__title').textContent = item.Offer.title;
-  adElement.querySelector('.popup__text--address').textContent = item.Offer.address;
-  adElement.querySelector('.popup__text--price').textContent = `${item.Offer.price} ₽/ночь`;
-  adElement.querySelector('.popup__type').textContent = TYPES[item.Offer.type];
-  adElement.querySelector('.popup__text--capacity').textContent = `${item.Offer.rooms} комнаты для ${item.Offer.guests} гостей`;
-  adElement.querySelector('.popup__text--time').textContent = `Заезд после ${item.Offer.checkin} выезд до ${item.Offer.checkout}`;
-  adElement.querySelector('.popup__description').textContent = item.Offer.description;
-  adElement.querySelector('.popup__avatar').src = item.Author.avatar;
+  adElement.querySelector('.popup__title').textContent = item.offer.title;
+  adElement.querySelector('.popup__text--address').textContent = item.offer.address;
+  adElement.querySelector('.popup__text--price').textContent = `${item.offer.price} ₽/ночь`;
+  adElement.querySelector('.popup__type').textContent = TYPES[item.offer.type];
+  adElement.querySelector('.popup__text--capacity').textContent = `${item.offer.rooms} комнаты для ${item.offer.guests} гостей`;
+  adElement.querySelector('.popup__text--time').textContent = `Заезд после ${item.offer.checkin} выезд до ${item.offer.checkout}`;
+  adElement.querySelector('.popup__description').textContent = item.offer.description;
+  adElement.querySelector('.popup__avatar').src = item.author.avatar;
 
   // ДОПОЛНИТЕЛЬНЫЕ УДОБСТВА
   const popupFeatures = adElement.querySelector('.popup__features');
   const popupFeatureList = popupFeatures.querySelectorAll('.popup__feature');
 
-  if(Array.isArray(item.Offer.features)) {
-    const modifiers = item.Offer.features.map((featureValue) =>`popup__feature--${featureValue}`);
+  if(Array.isArray(item.offer.features)) {
+    const modifiers = item.offer.features.map((featureValue) =>`popup__feature--${featureValue}`);
 
     popupFeatureList.forEach((popupFeature) => {
       const modifier = popupFeature.classList[1]; // 1 -  индекс класса в атрибуте
@@ -38,7 +38,7 @@ const createCustomPopup = (item) => {
       }
     });
   } else {
-    const modifiers = `popup__feature--${item.Offer.features}`;
+    const modifiers = `popup__feature--${item.offer.features}`;
     popupFeatureList.forEach((popupFeature) => {
       const modifier = popupFeature.classList[1]; // 1 -  индекс класса в атрибуте
       if (modifiers !== modifier) {
@@ -50,10 +50,10 @@ const createCustomPopup = (item) => {
   const popupPhotos = adElement.querySelector('.popup__photos');
   const popupPhoto = popupPhotos.querySelector('.popup__photo');
 
-  if(Array.isArray(item.Offer.photos)) {
-    item.Offer.photos.forEach((photoSrc, index) => {
+  if(Array.isArray(item.offer.photos)) {
+    item.offer.photos.forEach((photoSrc, index) => {
       if(index === 0){
-        popupPhoto.src = item.Offer.photos[0];
+        popupPhoto.src = item.offer.photos[0];
       } else {
         const popupPhotoItem = popupPhoto.cloneNode(true);
         popupPhotoItem.src = photoSrc;
@@ -61,7 +61,7 @@ const createCustomPopup = (item) => {
       }
     });
   } else {
-    popupPhoto.src = item.Offer.photos;
+    popupPhoto.src = item.offer.photos;
   }
 
   return adElement;
