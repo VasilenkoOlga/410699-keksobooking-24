@@ -2,10 +2,10 @@ import {createCustomPopup} from './display-ads.js';
 import { inactivePage, activePage } from './active-page.js';
 import { resetForm } from './form.js';
 import {getData} from './api.js';
+import {debounce} from './utils/debounce.js';
 
 const DEFAULT_VALUE = 'any';
-const MAX_ADD = 10;
-const DEFAULT_DEBOUNCE = 500;
+const DEFAULT_DEBOUNCE = 5000;
 
 const formElement = document.querySelector('.map__filters');
 const filterTypeElement = formElement.querySelector('select[name="housing-type"]');
@@ -78,6 +78,12 @@ mainMarker.on('moveend', (evt) => {
 });
 
 
+const mapData = {
+  markers: [],
+};
+
+
+//Создание обычных отметок
 const renderMarkers = (offers) => {
   offers.forEach((element) =>{
 
@@ -100,7 +106,14 @@ const renderMarkers = (offers) => {
     marker
       .addTo(mapCanvas)
       .bindPopup(createCustomPopup(element));
+    mapData.markers.push(marker);
   });
+};
+
+// Удаление лишних отметок
+const removeMarkers = () => {
+  mapData.markers.forEach((marker) => marker.remove());
+  mapData.markers = [];
 };
 
 const resetMarker = () => {
@@ -111,46 +124,28 @@ const resetMarker = () => {
   address.value = `${mainMarker.getLatLng().lat.toFixed(5)}, ${mainMarker.getLatLng().lng.toFixed(5)}`;
 };
 
+// Сброс формы
 resetButton.addEventListener('click', () => {
   resetForm();
 });
 
-filterTypeElement.addEventListener('change', ()=> {
-  console.log(filterTypeElement.value);
-  getData();
-});
-
-filterPriceElement.addEventListener('change', ()=> {
-  console.log(filterPriceElement.value);
-  getData();
-});
-
-filterRoomsNumberElement.addEventListener('change', ()=> {
-  console.log(filterRoomsNumberElement.value);
-  getData();
-});
-
-filterGuestsNumberElement.addEventListener('change', ()=> {
-  console.log(filterGuestsNumberElement.value);
-  getData();
-});
-
+// Добавляем события фильтров
+filterTypeElement.addEventListener('change', debounce(getData, DEFAULT_DEBOUNCE));
+filterPriceElement.addEventListener('change', debounce(getData, DEFAULT_DEBOUNCE));
+filterRoomsNumberElement.addEventListener('change', debounce(getData, DEFAULT_DEBOUNCE));
+filterGuestsNumberElement.addEventListener('change', debounce(getData, DEFAULT_DEBOUNCE));
 filterFeaturesElementList.forEach((element) =>
-  element.addEventListener('click', ()=> {
-    console.log(element.value);
-    getData();
-  },
-  ));
+  element.addEventListener('click', debounce(getData, DEFAULT_DEBOUNCE)));
 
+//Фильтруем по типу жилья
 function filterByType (offers) {
   if (filterTypeElement.value !== DEFAULT_VALUE) {
     offers = offers.filter((offer) => (offer.offer.type) ? offer.offer.type === filterTypeElement.value : false);
   }
-  console.log(offers);
   return offers;
-  //console.log(offers);
 }
 
+//Фильтруем по количеству комнат
 const filterByRoomsNumber = (offers) => {
   if (filterRoomsNumberElement.value !== DEFAULT_VALUE) {
     const roomsNumber = Number(filterRoomsNumberElement.value);
@@ -161,10 +156,10 @@ const filterByRoomsNumber = (offers) => {
       return Number(offer.offer.rooms) === roomsNumber;
     });
   }
-  console.log(offers);
   return offers;
 };
 
+//Фильтруем по количеству гостей
 const filterByGuestsNumber = (offers) => {
   if (filterGuestsNumberElement.value !== DEFAULT_VALUE) {
     const guestsNumber = Number(filterGuestsNumberElement.value);
@@ -175,10 +170,10 @@ const filterByGuestsNumber = (offers) => {
       return Number(offer.offer.guests) === guestsNumber;
     });
   }
-  console.log(offers);
   return offers;
 };
 
+//Фильтруем по цене
 const filterByPrice = (offers) => {
   const priceCurrentType = FILTER_PRICE_RANGE[filterPriceElement.value];
   if (filterPriceElement.value !== DEFAULT_VALUE && priceCurrentType) {
@@ -200,10 +195,10 @@ const filterByPrice = (offers) => {
       return false;
     });
   }
-  console.log(offers);
   return offers;
 };
 
+//Фильтруем по удобсмтвам
 const filterByFeatures = (offers) => {
   let filteredCards = offers;
   filterFeaturesElementList.forEach((filterFeaturesElement) => {
@@ -216,13 +211,7 @@ const filterByFeatures = (offers) => {
       });
     }
   });
-  console.log(offers);
   return filteredCards;
 };
 
-/*
-
-Не решен вопрос с удалением лишних отметок .-.
-*/
-
-export {renderMarkers, resetMarker, filterByType, filterByRoomsNumber,filterByGuestsNumber, filterByPrice,filterByFeatures};
+export {renderMarkers, resetMarker, filterByType, filterByRoomsNumber,filterByGuestsNumber, filterByPrice,filterByFeatures, removeMarkers};

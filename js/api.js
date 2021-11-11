@@ -1,7 +1,11 @@
-import  {renderMarkers, filterByType, filterByRoomsNumber, filterByGuestsNumber, filterByPrice, filterByFeatures} from './map.js';
+import  {renderMarkers, filterByType, filterByRoomsNumber, filterByGuestsNumber, filterByPrice, filterByFeatures, removeMarkers} from './map.js';
 import {resetForm, form} from './form.js';
 import {showAlert,successClone, errorClone, appendInBody} from './popup.js';
 
+const filterOffers = (offers) => {
+  offers = filterByType(filterByRoomsNumber(filterByGuestsNumber(filterByPrice(filterByFeatures(offers)))));
+  return offers;
+};
 
 const MAX_ADD = 10;
 
@@ -11,8 +15,8 @@ const getData = () => {
       if (response.ok) {
         response.json()
           .then((offers) => {
-            offers = filterByType(filterByRoomsNumber(filterByGuestsNumber(filterByPrice(filterByFeatures(offers)))));
-            renderMarkers((offers).slice(0, MAX_ADD));
+            removeMarkers();
+            renderMarkers(filterOffers((offers)).slice(0, MAX_ADD));
           });
       } else {
         showAlert('Не удалось загрузить данные');
