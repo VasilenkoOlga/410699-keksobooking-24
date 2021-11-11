@@ -1,6 +1,3 @@
-//import {createElements} from './data.js';
-
-//createElements();
 const ad = document.querySelector('#card').content.querySelector('.popup');
 
 const TYPES = {
