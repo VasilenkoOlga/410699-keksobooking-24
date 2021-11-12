@@ -57,8 +57,10 @@ const createCustomPopup = (item) => {
         popupPhotos.appendChild(popupPhotoItem);
       }
     });
-  } else {
+  } else if(item.offer.photos) {
     popupPhoto.src = item.offer.photos;
+  } else {
+    popupPhotos.remove();
   }
 
   return adElement;

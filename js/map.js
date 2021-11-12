@@ -1,11 +1,11 @@
-import {createCustomPopup} from './display-ads.js';
 import { inactivePage, activePage } from './active-page.js';
+import {createCustomPopup} from './display-ads.js';
 import { resetForm } from './form.js';
 import {getData} from './api.js';
 import {debounce} from './utils/debounce.js';
 
 const DEFAULT_VALUE = 'any';
-const DEFAULT_DEBOUNCE = 5000;
+const DEFAULT_DEBOUNCE = 500;
 
 const formElement = document.querySelector('.map__filters');
 const filterTypeElement = formElement.querySelector('select[name="housing-type"]');
@@ -129,6 +129,7 @@ resetButton.addEventListener('click', () => {
   resetForm();
 });
 
+// СОБЫТИЯ ФИЛЬТРОВ
 // Добавляем события фильтров
 filterTypeElement.addEventListener('change', debounce(getData, DEFAULT_DEBOUNCE));
 filterPriceElement.addEventListener('change', debounce(getData, DEFAULT_DEBOUNCE));
@@ -137,6 +138,7 @@ filterGuestsNumberElement.addEventListener('change', debounce(getData, DEFAULT_D
 filterFeaturesElementList.forEach((element) =>
   element.addEventListener('click', debounce(getData, DEFAULT_DEBOUNCE)));
 
+// ФИЛЬТРЫ
 //Фильтруем по типу жилья
 function filterByType (offers) {
   if (filterTypeElement.value !== DEFAULT_VALUE) {
@@ -214,4 +216,9 @@ const filterByFeatures = (offers) => {
   return filteredCards;
 };
 
-export {renderMarkers, resetMarker, filterByType, filterByRoomsNumber,filterByGuestsNumber, filterByPrice,filterByFeatures, removeMarkers};
+const filterOffers = (offers) => {
+  offers = filterByType(filterByRoomsNumber(filterByGuestsNumber(filterByPrice(filterByFeatures(offers)))));
+  return offers;
+};
+
+export {renderMarkers, resetMarker, removeMarkers, filterOffers};

@@ -1,16 +1,13 @@
-import  {renderMarkers, filterByType, filterByRoomsNumber, filterByGuestsNumber, filterByPrice, filterByFeatures, removeMarkers} from './map.js';
+import  {renderMarkers, removeMarkers, filterOffers} from './map.js';
 import {resetForm, form} from './form.js';
 import {showAlert,successClone, errorClone, appendInBody} from './popup.js';
 
-const filterOffers = (offers) => {
-  offers = filterByType(filterByRoomsNumber(filterByGuestsNumber(filterByPrice(filterByFeatures(offers)))));
-  return offers;
-};
-
+const SAVE_FORM_URL = 'https://24.javascript.pages.academy/keksobooking';
+const DATE_MAP_URL = 'https://24.javascript.pages.academy/keksobooking/data';
 const MAX_ADD = 10;
 
 const getData = () => {
-  fetch('https://24.javascript.pages.academy/keksobooking/data')
+  fetch(DATE_MAP_URL)
     .then((response) => {
       if (response.ok) {
         response.json()
@@ -34,7 +31,7 @@ const sendData = () => {
     const formData = new FormData(evt.target);
 
     fetch(
-      'https://24.javascript.pages.academy/keksobooking',
+      SAVE_FORM_URL,
       {
         method: 'POST',
         body: formData,
