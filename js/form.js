@@ -1,5 +1,8 @@
 import  {resetMarker} from './map.js';
 import {mapFilters} from './active-page.js';
+import {getData} from './api.js';
+
+'use strict';
 
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
@@ -20,6 +23,28 @@ const formCapacity = form.querySelector('#capacity');
 const formType = form.querySelector('#type');
 const formTimein = form.querySelector('#timein');
 const formTimeout = form.querySelector('#timeout');
+const formSubmit = form.querySelector('.ad-form__submit');
+const resetButton = document.querySelector('.ad-form__reset');
+
+const selectors = [formTitle, formPrice, formRoomNumber, formCapacity, formType, formTimein, formTimeout];
+
+const getError = function () {
+  selectors.forEach((seletor) => {
+    if (seletor.checkValidity() === false){
+      seletor.style.borderColor =  '#ff0000';
+    } else {
+      seletor.style.borderColor = '';
+    }
+  });
+};
+
+formSubmit.addEventListener('click', ()=> {
+  getError();
+});
+
+form.addEventListener('change', ()=> {
+  getError();
+});
 
 // ПРОВЕРКА НА ОБЯЗАТЕЛЬНОСТЬ ЗАПОЛНЕНИЯ ЗАГОЛОВКА
 formTitle.addEventListener('invalid', () => {
@@ -61,10 +86,8 @@ formPrice.addEventListener('input', () => {
   formPrice.reportValidity();
 });
 
-// СРАВНЕНИЕ КОМНАТ И КОЛИЧЕСТВА ГОСТЕЙ
-
-formRoomNumber.addEventListener('change', () => {
-
+// ВАЛИДАЦИЯ КОЛИЧЕСТВА КОМНАТ
+const validFormRoomNumber = function () {
   if(Number(formRoomNumber.value) === 100 && Number(formCapacity.value) !== 0) {
     formRoomNumber.setCustomValidity('Не для гостей. Измените значение количества мест');
   } else if(Number(formRoomNumber.value) < Number(formCapacity.value)){
@@ -76,12 +99,10 @@ formRoomNumber.addEventListener('change', () => {
   }
 
   formRoomNumber.reportValidity();
-});
+};
 
-// СРАВНЕНИЕ КОЛИЧЕСТВА ГОСТЕЙ И КОЛИЧЕСТВА КОМНАТ
-
-formCapacity.addEventListener('change', () => {
-
+// ВАЛИДАЦИЯ КОЛИЧЕСТВА МЕСТ
+const validFormCapacity = function () {
   if (Number(formCapacity.value) === 0 && Number(formRoomNumber.value) !== 100 ) {
     formCapacity.setCustomValidity('Только для 100 комнат. Измените значение количества комнат');
   } else if (Number(formRoomNumber.value) < Number(formCapacity.value)) {
@@ -93,6 +114,21 @@ formCapacity.addEventListener('change', () => {
   }
 
   formCapacity.reportValidity();
+};
+
+// СРАВНЕНИЕ КОМНАТ И КОЛИЧЕСТВА ГОСТЕЙ
+
+formRoomNumber.addEventListener('change', () => {
+  validFormRoomNumber();
+  validFormCapacity();
+});
+
+
+// СРАВНЕНИЕ КОЛИЧЕСТВА ГОСТЕЙ И КОЛИЧЕСТВА КОМНАТ
+
+formCapacity.addEventListener('change', () => {
+  validFormRoomNumber();
+  validFormCapacity();
 });
 
 // СРАВНЕНИЕ ТИПА ЖИЛЬЯ И ЦЕНЫ
@@ -124,10 +160,10 @@ formTimeout.addEventListener('change', () => {
   }
 });
 
-
 const clearForm = () => {
   form.reset();
   mapFilters.reset();
+  getData();
 };
 
 const resetForm = () => {
@@ -135,4 +171,11 @@ const resetForm = () => {
   resetMarker();
 };
 
-export { resetForm, form};
+// Сброс формы
+resetButton.addEventListener('click', () => {
+  resetForm();
+  getError();
+});
+
+export {resetForm, form};
+

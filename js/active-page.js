@@ -1,5 +1,4 @@
 const form = document.querySelector('.ad-form');
-
 const mapFilters = document.querySelector('.map__filters');
 const mapFeatures= form.children;
 const mapFiltersInteractive = mapFilters.children;

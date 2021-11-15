@@ -1,5 +1,7 @@
 import {isEscapeKey} from './util.js';
 
+const ALERT_SHOW_TIME = 5000;
+
 const success = document.querySelector('#success').content.querySelector('.success');
 const error = document.querySelector('#error').content.querySelector('.error');
 const body = document.querySelector('body');
@@ -19,8 +21,7 @@ const appendInBody = function (element) {  // Функция добавлени�
   });
 };
 
-const ALERT_SHOW_TIME = 5000;
-const showAlert = (message) => {
+const showAlert = (message) => { //СООБЩЕНИЕ ОБ ОШИБКЕ
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
   alertContainer.style.position = 'absolute';
