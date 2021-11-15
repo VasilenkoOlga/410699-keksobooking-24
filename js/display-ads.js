@@ -12,7 +12,7 @@ const createCustomPopup = (item) => {
 
   const adElement = ad.cloneNode(true);
 
-  const popupItems = [ //
+  const popupItems = [
     [item.offer.title, adElement.querySelector('.popup__title'), item.offer.title],
     [item.offer.address, adElement.querySelector('.popup__text--address'), item.offer.address],
     [item.offer.price, adElement.querySelector('.popup__text--price'),`${item.offer.price} ₽/ночь`],
