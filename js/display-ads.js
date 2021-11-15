@@ -1,6 +1,3 @@
-//import {createElements} from './data.js';
-
-//createElements();
 const ad = document.querySelector('#card').content.querySelector('.popup');
 
 const TYPES = {
@@ -15,14 +12,32 @@ const createCustomPopup = (item) => {
 
   const adElement = ad.cloneNode(true);
 
-  adElement.querySelector('.popup__title').textContent = item.offer.title;
-  adElement.querySelector('.popup__text--address').textContent = item.offer.address;
-  adElement.querySelector('.popup__text--price').textContent = `${item.offer.price} ₽/ночь`;
-  adElement.querySelector('.popup__type').textContent = TYPES[item.offer.type];
-  adElement.querySelector('.popup__text--capacity').textContent = `${item.offer.rooms} комнаты для ${item.offer.guests} гостей`;
-  adElement.querySelector('.popup__text--time').textContent = `Заезд после ${item.offer.checkin} выезд до ${item.offer.checkout}`;
-  adElement.querySelector('.popup__description').textContent = item.offer.description;
-  adElement.querySelector('.popup__avatar').src = item.author.avatar;
+  const popupItems = [
+    [item.offer.title, adElement.querySelector('.popup__title'), item.offer.title],
+    [item.offer.address, adElement.querySelector('.popup__text--address'), item.offer.address],
+    [item.offer.price, adElement.querySelector('.popup__text--price'),`${item.offer.price} ₽/ночь`],
+    [item.offer.type, adElement.querySelector('.popup__type'), TYPES[item.offer.type]],
+    [item.offer.description,adElement.querySelector('.popup__description'), item.offer.description],
+    [(item.offer.rooms && item.offer.guests), adElement.querySelector('.popup__text--time'), `${item.offer.rooms} комнаты для ${item.offer.guests} гостей`],
+    [(item.offer.checkin && item.offer.checkout), adElement.querySelector('.popup__text--time'),`Заезд после ${item.offer.checkin} выезд до ${item.offer.checkout}`],
+  ];
+
+  //заполнение тегов с текстовым содержанием
+  popupItems.forEach((popupItem) => {
+    if(popupItem[0]){
+      const popupElement = popupItem[1];
+      popupElement.textContent = popupItem[2];
+    } else {
+      popupItem[1].remove();
+    }});
+
+  // заполнение тега с содержанием картинки
+  const popupAvatar = adElement.querySelector('.popup__avatar');
+  if(item.author.avatar) {
+    popupAvatar.src = item.author.avatar;
+  } else {
+    popupAvatar.remove();
+  }
 
   // ДОПОЛНИТЕЛЬНЫЕ УДОБСТВА
   const popupFeatures = adElement.querySelector('.popup__features');
@@ -60,8 +75,10 @@ const createCustomPopup = (item) => {
         popupPhotos.appendChild(popupPhotoItem);
       }
     });
-  } else {
+  } else if(item.offer.photos) {
     popupPhoto.src = item.offer.photos;
+  } else {
+    popupPhotos.remove();
   }
 
   return adElement;
