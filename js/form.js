@@ -2,8 +2,6 @@ import  {resetMarker} from './map.js';
 import {mapFilters} from './active-page.js';
 import {getData} from './api.js';
 
-'use strict';
-
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 
