@@ -18,7 +18,7 @@ const createCustomPopup = (item) => {
     [item.offer.price, adElement.querySelector('.popup__text--price'),`${item.offer.price} ₽/ночь`],
     [item.offer.type, adElement.querySelector('.popup__type'), TYPES[item.offer.type]],
     [item.offer.description,adElement.querySelector('.popup__description'), item.offer.description],
-    [(item.offer.rooms && item.offer.guests), adElement.querySelector('.popup__text--time'), `${item.offer.rooms} комнаты для ${item.offer.guests} гостей`],
+    [(item.offer.rooms && item.offer.guests), adElement.querySelector('.popup__text--capacity'), `${item.offer.rooms} комнаты для ${item.offer.guests} гостей`],
     [(item.offer.checkin && item.offer.checkout), adElement.querySelector('.popup__text--time'),`Заезд после ${item.offer.checkin} выезд до ${item.offer.checkout}`],
   ];
 
