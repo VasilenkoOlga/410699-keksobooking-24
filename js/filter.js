@@ -13,15 +13,15 @@ const filterGuestsNumberElement = formElement.querySelector('select[name="housin
 const filterFeaturesElementList = formElement.querySelectorAll('input[name="features"]');
 
 const FilterPriceRange = {
-  LOW: {
+  low: {
     FROM: 0,
     TO: 10000,
   },
-  MIDDLE: {
+  middle: {
     FROM: 10000,
     TO: 50000,
   },
-  HIGH: {
+  high: {
     FROM: 50000,
   },
 };
@@ -75,7 +75,7 @@ const filterByGuestsNumber = (offers) => {
 
 // ФИЛЬТРУЕМ ПО ЦЕНЕ
 const filterByPrice = (offers) => {
-  const priceCurrentType = FilterPriceRange[filterPriceElement.value.toUpperCase()]; //промежуток из значения фильтра
+  const priceCurrentType = FilterPriceRange[filterPriceElement.value]; //промежуток из значения фильтра
   if (filterPriceElement.value !== DEFAULT_VALUE && priceCurrentType) { //если значение фильтра не равно значению по умолчанию или
     offers = offers.filter((announcement) => { // фильтруем объявления
       if (!announcement.offer.price) { // если цена отсутствует, то ошибка
