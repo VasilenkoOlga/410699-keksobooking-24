@@ -6,11 +6,11 @@ const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 
 const TypeOfHousing = {
-  PALACA: 10000,
-  FLAT: 1000,
-  HOUSE: 5000,
-  BOUNGALOW: 0,
-  HOTEL: 3000,
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  boungalow: 0,
+  hotel: 3000,
 };
 
 const form = document.querySelector('.ad-form');
