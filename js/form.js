@@ -5,11 +5,11 @@ import {getData} from './api.js';
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 
-const TypeOfHousing = {
+const TypeOfHousing = { //значения ниже с малеьнкой буквы,чтобы соответствовали значениям формы (если и в форме менять, то ошибка при отправке)
   palace: 10000,
   flat: 1000,
   house: 5000,
-  boungalow: 0,
+  bungalow: 0,
   hotel: 3000,
 };
 
