@@ -1,6 +1,6 @@
 const ad = document.querySelector('#card').content.querySelector('.popup');
 
-const TYPES = {
+const type = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -16,7 +16,7 @@ const createCustomPopup = (item) => {
     [item.offer.title, adElement.querySelector('.popup__title'), item.offer.title],
     [item.offer.address, adElement.querySelector('.popup__text--address'), item.offer.address],
     [item.offer.price, adElement.querySelector('.popup__text--price'),`${item.offer.price} ₽/ночь`],
-    [item.offer.type, adElement.querySelector('.popup__type'), TYPES[item.offer.type]],
+    [item.offer.type, adElement.querySelector('.popup__type'), type[item.offer.type]],
     [item.offer.description,adElement.querySelector('.popup__description'), item.offer.description],
     [(item.offer.rooms && item.offer.guests), adElement.querySelector('.popup__text--capacity'), `${item.offer.rooms} комнаты для ${item.offer.guests} гостей`],
     [(item.offer.checkin && item.offer.checkout), adElement.querySelector('.popup__text--time'),`Заезд после ${item.offer.checkin} выезд до ${item.offer.checkout}`],
@@ -40,13 +40,13 @@ const createCustomPopup = (item) => {
   }
 
   // ДОПОЛНИТЕЛЬНЫЕ УДОБСТВА
-  const popupFeatures = adElement.querySelector('.popup__features');
-  const popupFeatureList = popupFeatures.querySelectorAll('.popup__feature');
+  const popupFeatureList = adElement.querySelector('.popup__features');
+  const popupListFeatures = popupFeatureList.querySelectorAll('.popup__feature');
 
   if(Array.isArray(item.offer.features)) {
     const modifiers = item.offer.features.map((featureValue) =>`popup__feature--${featureValue}`);
 
-    popupFeatureList.forEach((popupFeature) => {
+    popupListFeatures.forEach((popupFeature) => {
       const modifier = popupFeature.classList[1]; // 1 -  индекс класса в атрибуте
       if (!modifiers.includes(modifier)) {
         popupFeature.remove();
@@ -54,7 +54,7 @@ const createCustomPopup = (item) => {
     });
   } else {
     const modifiers = `popup__feature--${item.offer.features}`;
-    popupFeatureList.forEach((popupFeature) => {
+    popupListFeatures.forEach((popupFeature) => {
       const modifier = popupFeature.classList[1]; // 1 -  индекс класса в атрибуте
       if (modifiers !== modifier) {
         popupFeature.remove();
@@ -62,8 +62,8 @@ const createCustomPopup = (item) => {
     });}
 
   // ФОТОГАЛЕРЕЯ
-  const popupPhotos = adElement.querySelector('.popup__photos');
-  const popupPhoto = popupPhotos.querySelector('.popup__photo');
+  const popupPhotoList = adElement.querySelector('.popup__photos');
+  const popupPhoto = popupPhotoList.querySelector('.popup__photo');
 
   if(Array.isArray(item.offer.photos)) {
     item.offer.photos.forEach((photoSrc, index) => {
@@ -72,13 +72,13 @@ const createCustomPopup = (item) => {
       } else {
         const popupPhotoItem = popupPhoto.cloneNode(true);
         popupPhotoItem.src = photoSrc;
-        popupPhotos.appendChild(popupPhotoItem);
+        popupPhotoList.appendChild(popupPhotoItem);
       }
     });
   } else if(item.offer.photos) {
     popupPhoto.src = item.offer.photos;
   } else {
-    popupPhotos.remove();
+    popupPhotoList.remove();
   }
 
   return adElement;

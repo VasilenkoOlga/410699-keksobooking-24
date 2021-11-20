@@ -5,12 +5,12 @@ import {getData} from './api.js';
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 
-const TYPE_OF_HOUSING = {
-  palace: 10000,
-  flat: 1000,
-  house: 5000,
-  bungalow: 0,
-  hotel: 3000,
+const TypeOfHousing = {
+  PALACA: 10000,
+  FLAT: 1000,
+  HOUSE: 5000,
+  BOUNGALOW: 0,
+  HOTEL: 3000,
 };
 
 const form = document.querySelector('.ad-form');
@@ -76,8 +76,8 @@ formPrice.addEventListener('invalid', () => {
 formPrice.addEventListener('input', () => {
   if (formPrice.validity.rangeOverflow){
     formPrice.setCustomValidity('Слишком высокая цена');
-  } else if (formPrice.value < TYPE_OF_HOUSING[formType.value]) {
-    formPrice.setCustomValidity(`Цена должна составлять не менее ${TYPE_OF_HOUSING[formType.value]}`);
+  } else if (formPrice.value < TypeOfHousing[formType.value]) {
+    formPrice.setCustomValidity(`Цена должна составлять не менее ${TypeOfHousing[formType.value]}`);
   } else {
     formPrice.setCustomValidity('');
   }
@@ -85,7 +85,7 @@ formPrice.addEventListener('input', () => {
 });
 
 // ВАЛИДАЦИЯ КОЛИЧЕСТВА КОМНАТ
-const validFormRoomNumber = function () {
+const validateRoomNumber = function () {
   if(Number(formRoomNumber.value) === 100 && Number(formCapacity.value) !== 0) {
     formRoomNumber.setCustomValidity('Не для гостей. Измените значение количества мест');
   } else if(Number(formRoomNumber.value) < Number(formCapacity.value)){
@@ -100,7 +100,7 @@ const validFormRoomNumber = function () {
 };
 
 // ВАЛИДАЦИЯ КОЛИЧЕСТВА МЕСТ
-const validFormCapacity = function () {
+const validateCapacity = function () {
   if (Number(formCapacity.value) === 0 && Number(formRoomNumber.value) !== 100 ) {
     formCapacity.setCustomValidity('Только для 100 комнат. Измените значение количества комнат');
   } else if (Number(formRoomNumber.value) < Number(formCapacity.value)) {
@@ -117,26 +117,26 @@ const validFormCapacity = function () {
 // СРАВНЕНИЕ КОМНАТ И КОЛИЧЕСТВА ГОСТЕЙ
 
 formRoomNumber.addEventListener('change', () => {
-  validFormRoomNumber();
-  validFormCapacity();
+  validateRoomNumber();
+  validateCapacity();
 });
 
 
 // СРАВНЕНИЕ КОЛИЧЕСТВА ГОСТЕЙ И КОЛИЧЕСТВА КОМНАТ
 
 formCapacity.addEventListener('change', () => {
-  validFormRoomNumber();
-  validFormCapacity();
+  validateRoomNumber();
+  validateCapacity();
 });
 
 // СРАВНЕНИЕ ТИПА ЖИЛЬЯ И ЦЕНЫ
 
 formType.addEventListener('change', () => {
-  formPrice.setAttribute('min', TYPE_OF_HOUSING[formType.value]);
-  formPrice.setAttribute('placeholder', TYPE_OF_HOUSING[formType.value]);
+  formPrice.setAttribute('min', TypeOfHousing[formType.value]);
+  formPrice.setAttribute('placeholder', TypeOfHousing[formType.value]);
 
-  if(formPrice.value < TYPE_OF_HOUSING[formType.value]){
-    formPrice.setCustomValidity(`Цена должна составлять не менее ${TYPE_OF_HOUSING[formType.value]}`);
+  if(formPrice.value < TypeOfHousing[formType.value]){
+    formPrice.setCustomValidity(`Цена должна составлять не менее ${TypeOfHousing[formType.value]}`);
   } else {
     formPrice.setCustomValidity('');
   }

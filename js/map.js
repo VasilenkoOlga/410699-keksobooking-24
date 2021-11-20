@@ -1,44 +1,23 @@
-import { inactivePage, activePage } from './active-page.js';
+import {deactivatePage, activatePage} from './active-page.js';
 import {createCustomPopup} from './display-ads.js';
-import {getData} from './api.js';
-import {debounce} from './utils/debounce.js';
+import {getFilteredOfffers} from './filter.js';
 
-const DEFAULT_VALUE = 'any';
-const DEFAULT_DEBOUNCE = 500;
+
 const LAT_CENTER = 35.68000;
 const LNG_CENTER = 139.75000;
+const MAX_ADD = 10;
 
-const formElement = document.querySelector('.map__filters');
-const filterTypeElement = formElement.querySelector('select[name="housing-type"]');
-const filterPriceElement = formElement.querySelector('select[name="housing-price"]');
-const filterRoomsNumberElement = formElement.querySelector('select[name="housing-rooms"]');
-const filterGuestsNumberElement = formElement.querySelector('select[name="housing-guests"]');
-const filterFeaturesElementList = formElement.querySelectorAll('input[name="features"]');
 const address = document.querySelector('#address');
-
-const FILTER_PRICE_RANGE = {
-  low: {
-    from: 0,
-    to: 10000,
-  },
-  middle: {
-    from: 10000,
-    to: 50000,
-  },
-  high: {
-    from: 50000,
-  },
-};
 
 const mapData = {
   markers: [],
 };
 
-inactivePage(); // НАЧАЛЬНОЕ НЕАКТИВНОЕ СОСТОЯНИЕ СТРАНИЦЫ
+deactivatePage(); // НАЧАЛЬНОЕ НЕАКТИВНОЕ СОСТОЯНИЕ СТРАНИЦЫ
 
 const mapCanvas = L.map('map-canvas')
   .on('load', () => {
-    activePage(); // АКТИВНОЕ СОСТОЯНИЕ ПОСЛЕ ЗАГРУЗК СТРАНИЦЫ
+    activatePage(); // АКТИВНОЕ СОСТОЯНИЕ ПОСЛЕ ЗАГРУЗК СТРАНИЦЫ
   })
   .setView({
     lat: LAT_CENTER,
@@ -116,93 +95,9 @@ const resetMarker = () => {
   address.value = `${mainMarker.getLatLng().lat.toFixed(5)}, ${mainMarker.getLatLng().lng.toFixed(5)}`;
 };
 
-// СОБЫТИЯ ФИЛЬТРОВ
-// Добавляем события фильтров
-filterTypeElement.addEventListener('change', debounce(getData, DEFAULT_DEBOUNCE));
-filterPriceElement.addEventListener('change', debounce(getData, DEFAULT_DEBOUNCE));
-filterRoomsNumberElement.addEventListener('change', debounce(getData, DEFAULT_DEBOUNCE));
-filterGuestsNumberElement.addEventListener('change', debounce(getData, DEFAULT_DEBOUNCE));
-filterFeaturesElementList.forEach((element) =>
-  element.addEventListener('click', debounce(getData, DEFAULT_DEBOUNCE)));
-
-// ФИЛЬТРЫ
-
-//ФИЛЬТРУЕМ ПО ТИПУ ЖИЛЬЯ
-function filterByType (offers) {
-  if (filterTypeElement.value !== DEFAULT_VALUE) {
-    offers = offers.filter((announcement) => (announcement.offer.type === filterTypeElement.value) || false);
-  }
-  return offers;
-}
-
-//ФИЛЬТРУЕМ ПО КОЛИЧЕСТВУ КОМНАТ
-const filterByRoomsNumber = (offers) => {
-  if (filterRoomsNumberElement.value !== DEFAULT_VALUE) {
-    const roomsNumber = Number(filterRoomsNumberElement.value);
-    offers = offers.filter((announcement) => {
-      if (!announcement.offer.rooms) {
-        return false;
-      }
-      return Number(announcement.offer.rooms) === roomsNumber;
-    });
-  }
-  return offers;
+const showMarkers = function (offers) {
+  removeMarkers();
+  renderMarkers(getFilteredOfffers((offers)).slice(0, MAX_ADD));
 };
 
-//ФИЛЬТРУЕМ ПО КОЛИЧЕСТВУ ГОСТЕЙ
-const filterByGuestsNumber = (offers) => {
-  if (filterGuestsNumberElement.value !== DEFAULT_VALUE) {
-    const guestsNumber = Number(filterGuestsNumberElement.value);
-    offers = offers.filter((announcement) => {
-      if (typeof announcement.offer.guests === 'undefined') {
-        return false;
-      }
-      return Number(announcement.offer.guests) === guestsNumber;
-    });
-  }
-  return offers;
-};
-
-// ФИЛЬТРУЕМ ПО ЦЕНЕ
-const filterByPrice = (offers) => {
-  const priceCurrentType = FILTER_PRICE_RANGE[filterPriceElement.value]; //промежуток из значения фильтра
-  if (filterPriceElement.value !== DEFAULT_VALUE && priceCurrentType) { //если значение фильтра не равно значению по умолчанию или
-    offers = offers.filter((announcement) => { // фильтруем объявления
-      if (!announcement.offer.price) { // если цена отсутствует, то ошибка
-        return false;
-      }
-
-      const priceValue = Number(announcement.offer.price); // значение объявления
-      if (((priceValue >= priceCurrentType.from) && !priceCurrentType.to)|| ((priceValue >= priceCurrentType.from) && (priceValue < priceCurrentType.to))) { // если значение объявления больше или равно "от" и значение до отсутствует ИЛИ если есть занчение "до" и значение объявления меньше "до"
-        return true;
-      } else {
-        return false;
-      }
-    });
-  }
-  return offers;
-};
-
-//ФИЛЬТРУЕМ ПО УДОБСТВАМ
-const filterByFeatures = (offers) => {
-  let filteredCards = offers;
-  filterFeaturesElementList.forEach((filterFeaturesElement) => {
-    if (filterFeaturesElement.checked) {
-      filteredCards = filteredCards.filter((announcement) => {
-        if (!announcement.offer.features) {
-          return false;
-        }
-        return announcement.offer.features.includes(filterFeaturesElement.value);
-      });
-    }
-  });
-  return filteredCards;
-};
-
-// ФИЛЬТРУЕМ ПО ВСЕМ ПАРАМЕТРАМ
-const filterOffers = (offers) => {
-  offers = filterByType(filterByRoomsNumber(filterByGuestsNumber(filterByPrice(filterByFeatures(offers)))));
-  return offers;
-};
-
-export {renderMarkers, resetMarker, removeMarkers, filterOffers, mapCanvas};
+export {resetMarker, mapCanvas, showMarkers};

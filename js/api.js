@@ -1,10 +1,9 @@
-import  {renderMarkers, removeMarkers, filterOffers} from './map.js';
+import {showMarkers} from './map.js';
 import {resetForm, form} from './form.js';
 import {showAlert,successClone, errorClone, appendInBody} from './popup.js';
 
 const SAVE_FORM_URL = 'https://24.javascript.pages.academy/keksobooking';
 const DATE_MAP_URL = 'https://24.javascript.pages.academy/keksobooking/data';
-const MAX_ADD = 10;
 
 const getData = () => {
   fetch(DATE_MAP_URL)
@@ -12,8 +11,7 @@ const getData = () => {
       if (response.ok) {
         response.json()
           .then((offers) => {
-            removeMarkers();
-            renderMarkers(filterOffers((offers)).slice(0, MAX_ADD));
+            showMarkers(offers);
           });
       } else {
         showAlert('Не удалось загрузить данные');
