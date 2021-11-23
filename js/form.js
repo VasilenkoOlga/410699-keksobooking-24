@@ -5,6 +5,8 @@ import {getData} from './api.js';
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 const TypeOfHousing = { //значения ниже с малеьнкой буквы,чтобы соответствовали значениям формы (если и в форме менять, то ошибка при отправке)
   palace: 10000,
   flat: 1000,
@@ -23,6 +25,10 @@ const formTimein = form.querySelector('#timein');
 const formTimeout = form.querySelector('#timeout');
 const formSubmit = form.querySelector('.ad-form__submit');
 const resetButton = document.querySelector('.ad-form__reset');
+const fileInputPhoto = document.querySelector('.ad-form__upload input[type=file]');
+const previewPhoto = document.querySelector('.ad-form__photo img');
+const fileInputAvatar = document.querySelector('.ad-form__field input[type=file]');
+const previewAvatar = document.querySelector('.ad-form-header__preview img');
 
 const selectors = [formTitle, formPrice, formRoomNumber, formCapacity, formType, formTimein, formTimeout];
 
@@ -156,6 +162,25 @@ formTimeout.addEventListener('change', () => {
   if(formTimeout.value !== formTimein.value) {
     formTimein.value = formTimeout.value;
   }
+});
+
+const addPicture = function (fileInput, preview) {
+  const file = fileInput.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if(matches) {
+    preview.src = URL.createObjectURL(file);
+  }
+};
+
+fileInputPhoto.addEventListener('change', () => {
+  addPicture(fileInputPhoto, previewPhoto);
+});
+
+fileInputAvatar.addEventListener('change', () => {
+  addPicture(fileInputAvatar, previewAvatar);
 });
 
 const clearForm = () => {
